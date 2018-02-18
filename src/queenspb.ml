@@ -10,19 +10,11 @@ module Xmap = Map.Make(struct
     let compare = compare
   end)
 
-module Xset = Set.Make(struct
-    type t = x
-    let compare = compare
-  end)
-
 type instance = v Xmap.t
 
 let empty = Xmap.empty
 
 let vars = [ "l1" ; "l2" ; "l3" ; "l4" ]
-
-let varset = List.fold_left (fun acc elt -> Xset.add elt acc) Xset.empty
-    [ "l1" ; "l2" ; "l3" ; "l4" ]
 
 (* [line_of_var x] returns the line associated to var [x] *)
 let line_of_var var = int_of_string (Str.last_chars var 1)

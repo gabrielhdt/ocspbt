@@ -1,5 +1,5 @@
 # See https://github.com/ocaml/ocamlbuild/blob/master/examples/
-DOCDIR = doc/ac.docdir
+DOCDIR = doc/ocspbt.docdir
 .PHONY: all clean byte native profile debug
 
 OCB_FLAGS = -use-ocamlfind
@@ -26,16 +26,16 @@ doc_html:
 	$(OCB) $(OCB_FLAGS) $(DOCDIR)/index.html
 
 doc_man:
-	$(OCB) $(OCB_FLAGS) $(DOCDIR)/bt.man
+	$(OCB) $(OCB_FLAGS) $(DOCDIR)/ocspbt.man
 
 doc_tex:
-	$(OCB) $(OCB_FLAGS) $(DOCDIR)/bt.tex
+	$(OCB) $(OCB_FLAGS) $(DOCDIR)/ocspbt.tex
 
 doc_texinfo:
-	$(OCB) $(OCB_FLAGS) $(DOCDIR)/bt.texi
+	$(OCB) $(OCB_FLAGS) $(DOCDIR)/ocspbt.texi
 
 doc_dot:
-	$(OCB) $(OCB_FLAGS) $(DOCDIR)/bt.dot
+	$(OCB) $(OCB_FLAGS) $(DOCDIR)/ocspbt.dot
 
 tags:
 	ctags src/*.ml src/*.mli Makefile

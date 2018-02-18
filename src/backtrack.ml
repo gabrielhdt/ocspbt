@@ -1,18 +1,24 @@
-module type S = sig
+module type CSPS = sig
   type x
 
   type v
 
   type instance
 
+  val empty : instance
+
+  val vars : x list
+
   val feasible : x -> v -> instance -> bool
 
   val union : instance -> x -> v -> instance
 
   val domain : x -> v list
+
+  val print : instance -> unit
 end
 
-module Make (Csp : S) = struct
+module Make (Csp : CSPS) = struct
 
   let rec bt (v : Csp.x list) (a : Csp.instance option) =
     let instance = match a with (* Extract instance *)

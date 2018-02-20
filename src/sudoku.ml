@@ -35,6 +35,8 @@ let feasible var value inst =
   Xmap.fold (fun _ elt acc -> elt <> value && acc) square true &&
   Xmap.fold (fun _ elt acc -> elt <> value && acc) cross true
 
+let union inst var value = Xmap.add var value inst
+
 let consistent sudoku =
   Xmap.fold (fun k elt acc ->
       let sudoku_nok = Xmap.remove k sudoku in

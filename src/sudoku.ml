@@ -60,3 +60,18 @@ let print sudoku =
     print_newline () ;
     if (line + 1) mod size = 0 then print_newline ()
   done
+
+let str2tuple s =
+  let reg = Str.regexp " " in
+  match Str.split reg s with
+  | [line ; col] -> int_of_string line, int_of_string col
+  | _ -> failwith "wrong key format, must be '<line> <column>'"
+
+let load path =
+  let json = Yojson.Basic.from_file path in
+  let s2jsint = Yojson.Basic.Util.to_assoc json in
+  let var2val = List.map (fun (s, jsint) ->
+      str2tuple s, Yojson.Basic.Util.to_int jsint)
+      s2jsint in
+  List.fold_left (fun acc elt -> Xmap.add (fst elt) (snd elt) acc) Xmap.empty
+    var2val

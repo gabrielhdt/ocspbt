@@ -36,5 +36,5 @@ module type CSPS =
 module Make : functor (Csp : CSPS) ->
     sig
       (** [bt v a] executes backtrack of variables [v] from instance [a] *)
-      val bt : Csp.x list -> Csp.instance option -> Csp.instance option
+      val bt : Csp.x list -> Csp.instance -> Csp.instance
     end

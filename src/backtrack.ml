@@ -20,7 +20,7 @@ end
 
 module Make (Csp : CSPS) = struct
 
-  let rec bt (v : Csp.x list) (a : Csp.instance option) =
+  let rec bt_aux (v : Csp.x list) (a : Csp.instance option) =
     let instance = match a with (* Extract instance *)
       | None -> failwith "何"
       | Some k -> k
@@ -33,10 +33,16 @@ module Make (Csp : CSPS) = struct
           | [] -> None (* No feasible new instance found *)
           | x :: rxs ->
               if Csp.feasible hd x instance
-              then match bt tl (Some (Csp.union instance hd x)) with
+              then match bt_aux tl (Some (Csp.union instance hd x)) with
                 (* If the new instance is not feasible, try another value *)
                 | None -> loop rxs
                 | Some j -> Some j (* Good instance, return it *)
               else loop rxs
         in loop (Csp.domain hd)
+
+  let bt v a =
+    let res = bt_aux v (Some a) in
+    match res
+    with None -> failwith "何?"
+       | Some i -> i
 end

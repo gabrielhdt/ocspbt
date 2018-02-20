@@ -25,6 +25,8 @@ let group_of_var = function (l, c) -> l / 3, c / 3
 
 let domain x = [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ]
 
+let union inst var value = Xmap.add var value inst
+
 let feasible var value inst =
   let vl, vc = var in
   let cross = Xmap.filter (fun k _ ->
@@ -35,20 +37,21 @@ let feasible var value inst =
   Xmap.fold (fun _ elt acc -> elt <> value && acc) square true &&
   Xmap.fold (fun _ elt acc -> elt <> value && acc) cross true
 
-let union inst var value = Xmap.add var value inst
-
 let consistent sudoku =
   Xmap.fold (fun k elt acc ->
       let sudoku_nok = Xmap.remove k sudoku in
       feasible k elt sudoku_nok && acc) sudoku true
 
 let print sudoku =
-  print_endline " --- --- ---" ;
+  print_endline " ---|---|---" ;
   for line = 1 to 9 do
+    print_string "|" ;
     for col = 1 to 9 do
-      Printf.printf "%d" (Xmap.find (line, col) sudoku) ;
+      if Xmap.mem (line, col) sudoku
+      then Printf.printf "%d" (Xmap.find (line, col) sudoku)
+      else Printf.printf "n" ;
       if col mod 3 = 0 then print_string "|"
     done ;
     print_newline () ;
-  done ;
-  print_endline " --- --- ---"
+    if line mod 3 = 0 then print_endline "|---|---|---|"
+  done

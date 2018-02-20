@@ -73,5 +73,11 @@ let load path =
   let var2val = List.map (fun (s, jsint) ->
       str2tuple s, Yojson.Basic.Util.to_int jsint)
       s2jsint in
-  List.fold_left (fun acc elt -> Xmap.add (fst elt) (snd elt) acc) Xmap.empty
-    var2val
+  let newinst = List.fold_left (fun acc elt -> Xmap.add (fst elt) (snd elt) acc)
+      Xmap.empty var2val
+  and var_to_remove = List.map (fun elt -> fst elt) var2val in
+  let newvars = List.fold_left (fun acc elt ->
+      if List.mem elt var_to_remove then acc else elt :: acc)
+      [] vars
+  in
+  newinst, newvars

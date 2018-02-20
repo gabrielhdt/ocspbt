@@ -15,4 +15,8 @@ val feasible : x -> v -> instance -> bool
 
 val union : instance -> x -> v -> instance
 
+val consistent : instance -> bool
+
 val print : instance -> unit
+
+val load : string -> instance * x list

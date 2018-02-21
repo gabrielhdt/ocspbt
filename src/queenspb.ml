@@ -1,6 +1,7 @@
 (* The queens problem is modelled as follow:
  * each variable represents a line of the board,
  * the values are the column on which each queen is placed *)
+
 type x = string
 
 type v = int
@@ -31,6 +32,11 @@ let feasible var value inst =
       line_of_var key - elt <> line_of_var var - value &&
       acc) inst true
   in col_check && diag_check
+
+let consistent queenspb =
+  Xmap.fold (fun k elt acc ->
+      let qpb_nok = Xmap.remove k queenspb in
+      feasible k elt qpb_nok && acc) queenspb true
 
 let union inst var value = Xmap.add var value inst
 

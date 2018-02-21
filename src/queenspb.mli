@@ -23,6 +23,9 @@ val domain : x -> v list
     nor on the diagonals *)
 val feasible : x -> v -> instance -> bool
 
+(** [consistent q] @returns if queens problem q is consistent *)
+val consistent : instance -> bool
+
 (** [union i v u] returns the instance [i] on line variable [v] with column
     value [u] *)
 val union : instance -> x -> v -> instance

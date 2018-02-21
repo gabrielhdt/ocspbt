@@ -22,6 +22,10 @@ module type CSPS =
         constraint [x = v] *)
     val feasible : x -> v -> instance -> bool
 
+    (** [consistent i] asserts whether instance [i] is consistent. Very close
+        from [feasible] *)
+    val consistent : instance -> bool
+
     (** [union a x v] returns a new instance of [a] with [x = v] *)
     val union : instance -> x -> v -> instance
 

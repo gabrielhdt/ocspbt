@@ -11,6 +11,8 @@ module type CSPS = sig
 
   val feasible : x -> v -> instance -> bool
 
+  val consistent : instance -> bool
+
   val union : instance -> x -> v -> instance
 
   val domain : x -> v list
@@ -41,8 +43,10 @@ module Make (Csp : CSPS) = struct
         in loop (Csp.domain hd)
 
   let bt v a =
-    let res = bt_aux v (Some a) in
-    match res
-    with None -> failwith "何?"
-       | Some i -> i
+    if Csp.consistent a then
+      let res = bt_aux v (Some a) in
+      match res
+      with None -> failwith "何?"
+         | Some i -> i
+    else failwith "initial instance not consistent"
 end

@@ -26,28 +26,32 @@ module type CSPS = sig
     type t
 
     val empty : t
-  end
 
-  module Var : VARS
+    val union : t -> t -> t
+
+    val consistent : t -> t
+  end
 
   module Val : VALS
 
-  module Instance : INSTS
+  module Var : VARS
 
-  val feasible : Var.t -> Val.t -> Instance.t -> bool
+  module Inst : INSTS
 
-  val consistent : Instance.t -> bool
+  val feasible : Var.t -> Val.t -> Inst.t -> bool
 
-  val union : Instance.t -> Var.t -> Val.t -> Instance.t
+  val union : Inst.t -> Var.t -> Val.t -> Inst.t
 
   val domain : Var.t -> Val.set
 
-  val print : Instance.t -> unit
+  val mem : Var.t -> Inst.t -> bool
+
+  val print : Inst.t -> unit
 end
 
 module Make (Csp : CSPS) = struct
 
-  let rec bt_aux (v : Csp.Var.set) (a : Csp.Instance.t option) =
+  let rec bt_aux (v : Csp.Var.set) (a : Csp.Inst.t option) =
     let instance = match a with (* Extract instance *)
       | None -> failwith "何"
       | Some k -> k
@@ -69,10 +73,41 @@ module Make (Csp : CSPS) = struct
       in loop (Csp.domain hd)
 
   let bt v a =
-    if Csp.consistent a then
+    if Csp.Inst.consistent a = Csp.Inst.empty then
       let res = bt_aux v (Some a) in
       match res
       with None -> failwith "何?"
          | Some i -> i
+    else failwith "initial instance not consistent"
+
+  let rec cbj_aux (v : Csp.Var.set) (a : Csp.Inst.t option) =
+    let instance = match a with None -> failwith "何？"
+                              | Some k -> k
+    in
+    if v = Csp.Var.empty then a
+    else let hd, tl = Csp.Var.next v in
+
+      let rec loop values conflict no_bj =
+        if values = Csp.Val.empty && not no_bj then None
+        else let x, rxs = Csp.Val.next values
+          and local_conflict = Csp.Inst.consistent instance in
+          if local_conflict = Csp.Inst.empty
+          then let child_conflict =
+                 match cbj_aux tl (Some (Csp.union instance hd x))
+                 with None -> failwith "error assigning child conflict"
+                    | Some j -> j
+            in if Csp.mem hd child_conflict
+            then loop rxs (Csp.Inst.union conflict child_conflict) true
+            else loop rxs child_conflict false
+          else loop rxs (Csp.Inst.union conflict local_conflict) true
+
+      in
+      loop (Csp.domain hd) (Csp.Inst.empty) true
+
+  let cbj v a =
+    if Csp.Inst.consistent a = Csp.Inst.empty then
+      let res = bt_aux v (Some a) in
+      match res with None -> failwith "何？"
+                   | Some i -> i
     else failwith "initial instance not consistent"
 end

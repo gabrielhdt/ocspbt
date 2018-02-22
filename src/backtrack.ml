@@ -1,6 +1,6 @@
-module type CSPS = sig
+module type ConstraintSatisfactionProblem = sig
 
-  module type VARS = sig
+  module type Variable = sig
     type t
 
     type set
@@ -12,7 +12,7 @@ module type CSPS = sig
     val next : set -> t * set
   end
 
-  module type VALS = sig
+  module type Value = sig
     type t
 
     type set
@@ -22,7 +22,7 @@ module type CSPS = sig
     val next : set -> t * set
   end
 
-  module type INSTS = sig
+  module type Instance = sig
     type t
 
     val empty : t
@@ -32,11 +32,11 @@ module type CSPS = sig
     val consistent : t -> t
   end
 
-  module Val : VALS
+  module Val : Value
 
-  module Var : VARS
+  module Var : Variable
 
-  module Inst : INSTS
+  module Inst : Instance
 
   val feasible : Var.t -> Val.t -> Inst.t -> bool
 
@@ -49,7 +49,7 @@ module type CSPS = sig
   val print : Inst.t -> unit
 end
 
-module Make (Csp : CSPS) = struct
+module Make (Csp : ConstraintSatisfactionProblem) = struct
 
   let rec bt_aux (v : Csp.Var.set) (a : Csp.Inst.t option) =
     let instance = match a with (* Extract instance *)

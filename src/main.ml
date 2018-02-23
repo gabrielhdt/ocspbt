@@ -1,9 +1,8 @@
 let () =
-  (*
   let module Queenbt = Backtrack.Make(Queenspb) in
-  let final_inst = Queenbt.bt Queenspb.vars Queenspb.empty in
-  Queenspb.print final_inst
-     *)
+  let final_inst = Queenbt.bt Queenspb.Var.init Queenspb.Inst.empty in
+  Queenspb.Inst.print final_inst
+  (*
   let module Sudokubt = Backtrack.Make(Sudoku) in
   let fi, nv = Sudoku.load Sys.argv.(1) in
   if Sudoku.consistent fi then
@@ -17,3 +16,4 @@ let () =
           Sudoku.print fi ;
           failwith "initial problem not consistent"
         end
+     *)

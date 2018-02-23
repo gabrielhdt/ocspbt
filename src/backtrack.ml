@@ -1,40 +1,42 @@
+module type Variable = sig
+  type t
+
+  type set
+
+  val init : set
+
+  val empty : set
+
+  val next : set -> t * set
+end
+
+module type Value = sig
+  type t
+
+  type set
+
+  val empty : set
+
+  val next : set -> t * set
+end
+
+module type Instance = sig
+  type t
+
+  val empty : t
+
+  val union : t -> t -> t
+
+  val consistent : t -> t
+
+  val print : t -> unit
+end
+
 module type ConstraintSatisfactionProblem = sig
 
-  module type Variable = sig
-    type t
-
-    type set
-
-    val init : set
-
-    val empty : set
-
-    val next : set -> t * set
-  end
-
-  module type Value = sig
-    type t
-
-    type set
-
-    val empty : set
-
-    val next : set -> t * set
-  end
-
-  module type Instance = sig
-    type t
-
-    val empty : t
-
-    val union : t -> t -> t
-
-    val consistent : t -> t
-  end
+  module Var : Variable
 
   module Val : Value
-
-  module Var : Variable
 
   module Inst : Instance
 
@@ -45,8 +47,6 @@ module type ConstraintSatisfactionProblem = sig
   val domain : Var.t -> Val.set
 
   val mem : Var.t -> Inst.t -> bool
-
-  val print : Inst.t -> unit
 end
 
 module Make (Csp : ConstraintSatisfactionProblem) = struct

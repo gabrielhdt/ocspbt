@@ -28,7 +28,7 @@ module type Value = sig
   type set
 
   (** The empty set of values *)
-  val emtpy : set
+  val empty : set
 
   val next : set -> t * set
 end
@@ -83,4 +83,8 @@ module Make : functor (Csp : ConstraintSatisfactionProblem) ->
     sig
       (** [bt v a] executes backtrack of variables [v] from instance [a] *)
       val bt : Csp.Var.set -> Csp.Inst.t -> Csp.Inst.t
+
+      (** [cbj v a] executes constraint backjumping on variables [v] from
+          instance [a] *)
+      val cbj : Csp.Var.set -> Csp.Inst.t -> Csp.Inst.t
     end

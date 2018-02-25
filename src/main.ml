@@ -1,11 +1,17 @@
 let () =
   (*
   let module Queenbt = Backtrack.Make(Queenspb) in
-  let final_inst = Queenbt.bt Queenspb.Var.init Queenspb.Inst.empty in
-  Queenspb.Inst.print final_inst ;
-  let inst_cbj = Queenbt.cbj Queenspb.Var.init Queenspb.Inst.empty in
-  Queenspb.Inst.print inst_cbj
-     *)
+  let init_inst = Queenspb.Inst.empty in
+  if Queenspb.Inst.consistent init_inst = Queenspb.Inst.empty then
+    begin
+      let final_inst = Queenbt.cbj Queenspb.Var.init init_inst in
+      Queenspb.Inst.print final_inst ;
+    end
+  else
+    begin
+      failwith "initial problem not consistent"
+    end
+    *)
   let module Sudokubt = Backtrack.Make(Sudoku) in
   let fi, nv = Sudoku.load Sys.argv.(1) in
   if Sudoku.Inst.consistent fi = Sudoku.Inst.empty then

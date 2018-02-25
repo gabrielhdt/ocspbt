@@ -34,7 +34,8 @@ let violate p1 v1 p2 v2 =
   if p1 = p2 then false (* If same cell *)
   else let l1, c1 = p1 and l2, c2 = p2
     and g1 = group_of_var p1 and g2 = group_of_var p2 in
-    v1 = v2 && (l1 = l2 || c1 = c2 || g1 = g2)
+    (*if*) v1 = v2 && (l1 = l2 || c1 = c2 || g1 = g2)
+    (* then (print_endline "violation" ; true) else (print_endline "nov" ; false) *)
 
 module Var = struct
   type t = int * int
@@ -76,8 +77,8 @@ module Inst = struct
           Xmap.fold (fun key2 elt2 acc2 ->
               if violate key1 elt1 key2 elt2
               then Xmap.add key2 elt2 acc2 else acc2)
-            sudoku Xmap.empty in
-        union acc1 (Xmap.add key1 elt1 violating_vars)) sudoku Xmap.empty
+            sudoku empty in
+        union acc1 violating_vars) sudoku empty
 
   let print sudoku =
     print_endline "Resulting すどく" ;
@@ -91,6 +92,8 @@ module Inst = struct
       print_newline () ;
       if (line + 1) mod size = 0 then print_newline ()
     done
+
+  let cardinal sudoku = Xmap.cardinal sudoku
 end
 
 let domain x =

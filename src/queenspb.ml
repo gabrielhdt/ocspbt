@@ -57,7 +57,7 @@ module Xmap = Map.Make(struct
 
 module Inst = struct
 
-  type t = Var.t Xmap.t
+  type t = Val.t Xmap.t
 
   let empty = Xmap.empty
 
